@@ -1,5 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+import { join } from 'path'
 import * as vscode from 'vscode'
 
 // this method is called when your extension is activated
@@ -22,7 +23,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 		// https://stackoverflow.com/a/64562296
 		/** Zero-based index of the last character in the selection */
-		const lastCharacterInSelection = activeTextEditor.document.lineAt(selection.active).range.end.character
+		const lastCharacterInSelection =
+			activeTextEditor.document.lineAt(selection.active).range.end.character
 
 		/** Expanded selection capturing the line's start and end position */
 		const fullSelection = new vscode.Selection(
@@ -35,11 +37,15 @@ export function activate(context: vscode.ExtensionContext) {
 		// TODO: Add check to ensure only one grid area is selected
 		const validGridAreasRegex = /^\s*grid-template-areas:(.|\n)*?;\s*$/i
 
-		if (!validGridAreasRegex.test(text)) return
+		if (!validGridAreasRegex.test(text)) {
+			throw vscode.window.showErrorMessage(
+				'The selection did not contain a valid `grid-template-areas` declaration.',
+			)
+		}
 
 		const regex = /"(.*)"/gi
 
-		let gridAreas = []
+		let gridAreas: string[] = []
 
 		// Matching multiple capture groups: https://stackoverflow.com/a/26392494
 		let match
@@ -94,7 +100,12 @@ export function activate(context: vscode.ExtensionContext) {
 			).join(' ')
 		)
 
-		const newSelection = indentSpaces + 'grid-template-areas:\n' + formattedLines.join('\n') + ';'
+		const newSelection = (
+			indentSpaces +
+			'grid-template-areas:\n' +
+			formattedLines.join('\n') +
+			';'
+		)
 
 		activeTextEditor.edit(editBuilder => {
 			editBuilder.replace(fullSelection, newSelection)
