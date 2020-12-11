@@ -85,32 +85,39 @@ export function activate(context: vscode.ExtensionContext) {
 			})
 		})
 
-		const filledGridAreas: string[][] = []
-
-		/** Fill empty cells will null cell tokens (e.g. ".") */
-		for (let i = 0; i < normalizedGridAreas.length; i++) {
-			filledGridAreas[i] = []
-
-			for (let j = 0; j < longestRowLength; j++) {
-				filledGridAreas[i][j] = normalizedGridAreas[i][j] || '.'
-			}
-		}
-
 		/** Used to maintain the initial selection indentation when building the final result */
 		const indentSpaces = ' '.repeat(text.indexOf('g'))
 
-		const formattedGridAreaRows = filledGridAreas.map(
-			row => row.map(
-				(token, i, tokens) => (
-					// Add indent and start quote on first token
-					(i === 0 ? indentSpaces + '\t"' : '') +
-					// Add end padding based on the longest token in the current column
-					token.padEnd(longestTokens[i], ' ') +
-					// Add ending quote on last token
-					(i === tokens.length - 1 ? '"' : '')
-				)
-			).join(' ')
-		)
+		const formattedGridAreaRows: string[] = []
+
+		/** Fill empty cells will null cell tokens (e.g. ".") */
+		for (let y = 0; y < normalizedGridAreas.length; y++) {
+			formattedGridAreaRows.push('')
+
+			for (let x = 0; x < longestRowLength; x++) {
+				const row = normalizedGridAreas[y]
+				const token = normalizedGridAreas[y][x] 
+				const isFirstToken = x === 0
+				const isLastToken = x === row.length - 1
+
+				formattedGridAreaRows[y] += (
+					// Add a space between every token but the first
+					(isFirstToken ? '' : ' ') +
+
+					// Add null cell token if there is no value in the current column
+					(!token ? '.' : (
+						// Add indent and start quote on first token
+						(isFirstToken ? indentSpaces + '\t"' : '') +
+
+						// Add end padding based on the longest token in the current column
+						token.padEnd(longestTokens[x], ' ') +
+
+						// Add ending quote on last token
+						(isLastToken ? '"' : '')
+					)
+				))
+			}
+		}
 
 		const newSelection = (
 			indentSpaces +
