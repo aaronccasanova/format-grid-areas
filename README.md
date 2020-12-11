@@ -1,67 +1,20 @@
-# format-grid-areas README
+# Format Grid Areas
 
-This is the README for your extension "format-grid-areas". After writing up a brief description, we recommend including the following sections.
+An opinionated css `grid-templates-areas` formatter.
 
-## Features
+<br />
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## How it works
 
-For example if there is an image subfolder under your extension project workspace:
+Select a `grid-template-areas` declaration and activate the extensions via keyboard shortcut or through the command palette.
 
-\!\[feature X\]\(images/feature-x.png\)
+- Keybinding: `alt-f alt-g`
+- Command Palette: `Format Grid Areas`
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+\!\[Format Grid Areas - Example 1\]\(images/example-1.gif\)
 
-## Requirements
+> Your selection can contain a partial match as long it covers every line of the declaration.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+\!\[Format Grid Areas - Example 2\]\(images/example-2.gif\)
 
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
-
-> NOTE: Following the "Your First Extensions" guide here: https://code.visualstudio.com/api/get-started/your-first-extension
+### NOTE: This extension will fill empty columns in your `grid-template-areas` with a null cell token (e.g. `'.'`)

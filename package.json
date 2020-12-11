@@ -1,9 +1,17 @@
 {
 	"name": "format-grid-areas",
-	"displayName": "format-grid-areas",
+	"displayName": "Format Grid Areas",
 	"description": "An opinionated css grid-template-areas formatter.",
 	"version": "0.0.1",
 	"publisher": "aaronccasanova",
+	"author": {
+    "name": "Aaron Casanova"
+	},
+	"repository": {
+    "type": "git",
+    "url": "https://github.com/aaronccasanova/format-grid-areas.git"
+  },
+	"icon": "images/icon.png",
 	"engines": {
 		"vscode": "^1.51.0"
 	},
