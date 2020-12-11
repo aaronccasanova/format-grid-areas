@@ -36,17 +36,24 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const text = activeTextEditor.document.getText(fullSelection)
 
-		// TODO: Add check to ensure only one grid area is selected
-		const validGridAreasRegex = /^[ ]*grid-template-areas:(.|\n)*?;[ ]*$/i
+		// Validation Reference:
+		// P1 - Starting with any number of spaces until the grid area property
+		// P2 - CSS grid-template-areas property including the colon
+		// P3 - Any number of spaces or newlines until the starting quote (e.g. starting grid area row)(lazy)
+		// P4 - Any grid area tokens until the ending quote (e.g. ending grid area row)(greedy)
+		// P5 - Any number of spaces or newlines until the ending semi-colon (lazy)
+		// P6 - Ending declaration semi-colon
+		// P7 - Any number of spaces to the end of the selection
+		//                            P1          P2             P3       P4     P5    P6P7
+		const validGridAreasRegex = /^[ ]*grid-template-areas:(.|\n)*?"(.|\n)*"(.|\n)*?;[ ]*$/i
 
 		if (!validGridAreasRegex.test(text)) {
 			throw vscode.window.showErrorMessage(
-				'The selection did not contain a valid `grid-template-areas` declaration or extended the bounds of the rule.',
+				'The selection did not contain a valid `grid-template-areas` declaration or extended the bounds of the declaration',
 			)
 		}
 
-		// TODO: Does not match rows all on one line
-		const gridAreaRowsRegex = /"(.*)"/gi
+		const gridAreaRowsRegex = /"(.*?)"/gi
 
 		let gridAreaRows: string[] = []
 
@@ -99,10 +106,12 @@ export function activate(context: vscode.ExtensionContext) {
 		const formattedGridAreaRows = filledGridAreas.map(
 			row => row.map(
 				(token, i, tokens) => (
-					indentSpaces +
-					(i === 0 ? '\t"' : '') + // Add indent and start quote on first token
+					// Add indent and start quote on first token
+					(i === 0 ? indentSpaces + '\t"' : '') +
+					// Add end padding based on the longest token in the current column
 					token.padEnd(longestTokens[i], ' ') +
-					(i === tokens.length - 1 ? '"' : '') // Add ending quote on last token
+					// Add ending quote on last token
+					(i === tokens.length - 1 ? '"' : '')
 				)
 			).join(' ')
 		)
