@@ -24,8 +24,8 @@
 		"keybindings": [
       {
         "command": "format-grid-areas.formatGridAreas",
-        "key": "ctrl+f ctrl+g",
-        "mac": "cmd+f cmd+g",
+        "key": "alt+f alt+g",
+        "mac": "alt+f alt+g",
         "when": "editorHasSelection"
       }
     ]
