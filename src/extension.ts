@@ -63,11 +63,7 @@ export function activate(context: vscode.ExtensionContext) {
 			gridAreaRows.push(match[1])
 		}
 
-		const normalizedGridAreas = gridAreaRows.map(
-			// TODO: combine replace and split logic
-			// Should be able to split on a regex match for any number of spaces/newlines
-			row => row.trim().replace(/\s+/g, ' ').split(' ')
-		)
+		const normalizedGridAreas = gridAreaRows.map(row => row.trim().split(/\s+/))
 
 		/** Longest row length is used to fill empty cells in the grid */
 		let longestRowLength = 0
