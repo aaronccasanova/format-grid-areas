@@ -83,5 +83,10 @@ grid-template-areas: "one two two three three three"
       "one two two three three three"
       "two two three three three one"
       "three three three one two two";
-      
+
+  grid-template-areas:
+  "three three three"
+  "two two"
+  "one"
+  ".";  
 `

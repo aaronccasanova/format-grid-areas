@@ -55,7 +55,15 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const largestWords: number[] = []
 
+		let longestLineLength = 0
+
 		normalizedLines.forEach(line => {
+			const currentLineLength = line.length
+
+			if (currentLineLength > longestLineLength) {
+				longestLineLength = currentLineLength
+			}
+
 			line.forEach((word, i) => {
 				if (!largestWords[i] || word.length > largestWords[i]) {
 					largestWords[i] = word.length
@@ -63,9 +71,19 @@ export function activate(context: vscode.ExtensionContext) {
 			})
 		})
 
+		const filledLines: string[][] = []
+
+		for (let i = 0; i < normalizedLines.length; i++) {
+			filledLines[i] = []
+
+			for (let j = 0; j < longestLineLength; j++) {
+				filledLines[i][j] = normalizedLines[i][j] || '.'
+			}
+		}
+
 		const indentSpaces = ' '.repeat(text.indexOf('g'))
 
-		const formattedLines = normalizedLines.map(
+		const formattedLines = filledLines.map(
 			line => line.map(
 				(word, i, words) => (
 					indentSpaces +
