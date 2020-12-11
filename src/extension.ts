@@ -1,6 +1,8 @@
+// `grid-template-areas` specification reference:
+// https://drafts.csswg.org/css-grid/#propdef-grid-template-areas
+
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { join } from 'path'
 import * as vscode from 'vscode'
 
 // this method is called when your extension is activated
@@ -26,7 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const lastCharacterInSelection =
 			activeTextEditor.document.lineAt(selection.active).range.end.character
 
-		/** Expanded selection capturing the line's start and end position */
+		/** Expanded selection capturing the (multi)line's start and end position */
 		const fullSelection = new vscode.Selection(
 			new vscode.Position(selection.start.line, 0),
 			new vscode.Position(selection.end.line, lastCharacterInSelection),
@@ -35,67 +37,72 @@ export function activate(context: vscode.ExtensionContext) {
 		const text = activeTextEditor.document.getText(fullSelection)
 
 		// TODO: Add check to ensure only one grid area is selected
-		const validGridAreasRegex = /^\s*grid-template-areas:(.|\n)*?;\s*$/i
+		const validGridAreasRegex = /^[ ]*grid-template-areas:(.|\n)*?;[ ]*$/i
 
 		if (!validGridAreasRegex.test(text)) {
 			throw vscode.window.showErrorMessage(
-				'The selection did not contain a valid `grid-template-areas` declaration.',
+				'The selection did not contain a valid `grid-template-areas` declaration or extended the bounds of the rule.',
 			)
 		}
 
-		const regex = /"(.*)"/gi
+		// TODO: Does not match rows all on one line
+		const gridAreaRowsRegex = /"(.*)"/gi
 
-		let gridAreas: string[] = []
+		let gridAreaRows: string[] = []
 
 		// Matching multiple capture groups: https://stackoverflow.com/a/26392494
 		let match
-		while (match = regex.exec(text)) {
-			gridAreas.push(match[1])
+		while (match = gridAreaRowsRegex.exec(text)) {
+			gridAreaRows.push(match[1])
 		}
 
-		const lines = gridAreas
-
-		const normalizedLines = lines.map(
-			line => line.trim().replace(/\s+/g, ' ').split(' ')
+		const normalizedGridAreas = gridAreaRows.map(
+			// TODO: combine replace and split logic
+			// Should be able to split on a regex match for any number of spaces/newlines
+			row => row.trim().replace(/\s+/g, ' ').split(' ')
 		)
 
-		const largestWords: number[] = []
+		/** Longest row length is used to fill empty cells in the grid */
+		let longestRowLength = 0
 
-		let longestLineLength = 0
+		/** List of the longest named cell token in each column */
+		const longestTokens: number[] = []
 
-		normalizedLines.forEach(line => {
-			const currentLineLength = line.length
+		normalizedGridAreas.forEach(row => {
+			const currentRowLength = row.length
 
-			if (currentLineLength > longestLineLength) {
-				longestLineLength = currentLineLength
+			if (currentRowLength > longestRowLength) {
+				longestRowLength = currentRowLength
 			}
 
-			line.forEach((word, i) => {
-				if (!largestWords[i] || word.length > largestWords[i]) {
-					largestWords[i] = word.length
+			row.forEach((token, i) => {
+				if (!longestTokens[i] || token.length > longestTokens[i]) {
+					longestTokens[i] = token.length
 				}
 			})
 		})
 
-		const filledLines: string[][] = []
+		const filledGridAreas: string[][] = []
 
-		for (let i = 0; i < normalizedLines.length; i++) {
-			filledLines[i] = []
+		/** Fill empty cells will null cell tokens (e.g. ".") */
+		for (let i = 0; i < normalizedGridAreas.length; i++) {
+			filledGridAreas[i] = []
 
-			for (let j = 0; j < longestLineLength; j++) {
-				filledLines[i][j] = normalizedLines[i][j] || '.'
+			for (let j = 0; j < longestRowLength; j++) {
+				filledGridAreas[i][j] = normalizedGridAreas[i][j] || '.'
 			}
 		}
 
+		/** Used to maintain the initial selection indentation when building the final result */
 		const indentSpaces = ' '.repeat(text.indexOf('g'))
 
-		const formattedLines = filledLines.map(
-			line => line.map(
-				(word, i, words) => (
+		const formattedGridAreaRows = filledGridAreas.map(
+			row => row.map(
+				(token, i, tokens) => (
 					indentSpaces +
-					(i === 0 ? '\t"' : '') + // Add indent and start quote on first word
-					word.padEnd(largestWords[i], ' ') +
-					(i === words.length - 1 ? '"' : '') // Add ending quote on last word
+					(i === 0 ? '\t"' : '') + // Add indent and start quote on first token
+					token.padEnd(longestTokens[i], ' ') +
+					(i === tokens.length - 1 ? '"' : '') // Add ending quote on last token
 				)
 			).join(' ')
 		)
@@ -103,7 +110,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const newSelection = (
 			indentSpaces +
 			'grid-template-areas:\n' +
-			formattedLines.join('\n') +
+			formattedGridAreaRows.join('\n') +
 			';'
 		)
 
