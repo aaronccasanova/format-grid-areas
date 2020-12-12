@@ -11,10 +11,10 @@ Select a `grid-template-areas` declaration and activate the extension via keyboa
 - Keybinding: `alt-f alt-g`
 - Command Palette: `Format Grid Areas`
 
-\!\[Format Grid Areas - Example 1\]\(images/example-1.gif\)
+![Format Grid Areas - Example 1](https://user-images.githubusercontent.com/32409546/101965998-61ca9b80-3bcb-11eb-8b74-9fa4d01e6be2.gif)
 
 > Your selection can contain a partial match as long it covers every line of the declaration.
 
-\!\[Format Grid Areas - Example 2\]\(images/example-2.gif\)
+![Format Grid Areas - Example 2](https://user-images.githubusercontent.com/32409546/101966001-63945f00-3bcb-11eb-9355-8b7f159658e8.gif)
 
 ### NOTE: This extension will fill empty columns in your `grid-template-areas` with a null cell token (e.g. `'.'`)
