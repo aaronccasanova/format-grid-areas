@@ -17,4 +17,12 @@ Select a `grid-template-areas` declaration and activate the extension via keyboa
 
 ![Format Grid Areas - Example 2](https://user-images.githubusercontent.com/32409546/101966001-63945f00-3bcb-11eb-9355-8b7f159658e8.gif)
 
-### NOTE: This extension will fill empty columns in your `grid-template-areas` with a null cell token (e.g. `'.'`)
+> NOTE: This extension will fill empty columns in your `grid-template-areas` with a null cell token (e.g. `'.'`)
+
+## Authors
+
+Aaron Casanova - [Website](https://aaronccasanova.com), [GitHub](https://github.com/aaronccasanova), [LinkedIn](https://www.linkedin.com/in/aaronccasanova)
+
+Maxamilian Demian - [Website](https://maxdemian.com), [GitHub](https://github.com/maxoplata), [LinkedIn](linkedin.com/in/maxamilian-demian/)
+
+a.k.a. Maxanova
