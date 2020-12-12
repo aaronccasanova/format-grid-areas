@@ -6,7 +6,7 @@ An opinionated css `grid-templates-areas` formatter.
 
 ## How it works
 
-Select a `grid-template-areas` declaration and activate the extensions via keyboard shortcut or through the command palette.
+Select a `grid-template-areas` declaration and activate the extension via keyboard shortcut or through the command palette.
 
 - Keybinding: `alt-f alt-g`
 - Command Palette: `Format Grid Areas`
