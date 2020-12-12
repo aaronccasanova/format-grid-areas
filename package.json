@@ -2,15 +2,15 @@
 	"name": "format-grid-areas",
 	"displayName": "Format Grid Areas",
 	"description": "An opinionated css grid-template-areas formatter.",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"publisher": "aaronccasanova",
 	"author": {
-    "name": "Aaron Casanova"
+		"name": "Aaron Casanova"
 	},
 	"repository": {
-    "type": "git",
-    "url": "https://github.com/aaronccasanova/format-grid-areas.git"
-  },
+		"type": "git",
+		"url": "https://github.com/aaronccasanova/format-grid-areas.git"
+	},
 	"icon": "images/icon.png",
 	"engines": {
 		"vscode": "^1.51.0"
@@ -30,13 +30,13 @@
 			}
 		],
 		"keybindings": [
-      {
-        "command": "format-grid-areas.formatGridAreas",
-        "key": "alt+f alt+g",
-        "mac": "alt+f alt+g",
-        "when": "editorHasSelection"
-      }
-    ]
+			{
+				"command": "format-grid-areas.formatGridAreas",
+				"key": "alt+f alt+g",
+				"mac": "alt+f alt+g",
+				"when": "editorHasSelection"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
