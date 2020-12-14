@@ -8,7 +8,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const { activeTextEditor } = vscode.window
 	
 		if (!activeTextEditor) {
-			throw vscode.window.showErrorMessage('No active text editor in focus.')
+			return vscode.window.showErrorMessage('No active text editor in focus.')
 		}
 
 		const selection = activeTextEditor.selection
@@ -38,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const validGridAreasRegex = /^[ ]*grid-template-areas:\s*?"(.|\n)*"\s*?;[ ]*$/i
 
 		if (!validGridAreasRegex.test(text)) {
-			throw vscode.window.showErrorMessage(
+			return vscode.window.showErrorMessage(
 				'The selection did not contain a valid `grid-template-areas` declaration or extended the bounds of the declaration',
 			)
 		}
