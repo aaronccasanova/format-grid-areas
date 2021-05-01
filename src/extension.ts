@@ -34,8 +34,8 @@ export function activate(context: vscode.ExtensionContext) {
 		// P5 - Any number of spaces or newlines until the ending semi-colon (lazy)
 		// P6 - Ending declaration semi-colon
 		// P7 - Any number of spaces to the end of the selection
-		//                             P1         P2           P3    P4    P5  P6P7
-		const validGridAreasRegex = /^[ ]*grid-template-areas:\s*?"(.|\n)*"\s*?;[ ]*$/i
+		//                             P1         P2           P3            P4             P5 P6P7
+		const validGridAreasRegex = /^[ ]*grid-template-areas:\s*?['|"](.|\r|\n|\r\n)*['|"]\s*?;[ ]*$/i
 
 		if (!validGridAreasRegex.test(text)) {
 			return vscode.window.showErrorMessage(
@@ -43,13 +43,20 @@ export function activate(context: vscode.ExtensionContext) {
 			)
 		}
 
-		const gridAreaRowsRegex = /"(.*?)"/gi
+		const gridAreaRowsRegex = /(['|"])(.*?)['|"]/gi
 
+		/**
+		 * Preferred quote to apply while formatting (e.g. single or double quote).
+		 *
+		 * Note: This is determined by the first quote found in the `grid-template-areas` declaration.
+		 */
+		let q
 		let gridAreaRows: string[] = []
 
 		let match
 		while (match = gridAreaRowsRegex.exec(text)) {
-			gridAreaRows.push(match[1])
+			if (!q) { q = match[1] }
+			gridAreaRows.push(match[2])
 		}
 
 		const normalizedGridAreas = gridAreaRows.map(row => row.trim().split(/\s+/))
@@ -89,13 +96,13 @@ export function activate(context: vscode.ExtensionContext) {
 				formattedGridAreaRows[y] += (
 					// Add an indent and start quote to the first token
 					// otherwise add a space to separate each column
-					(x === 0 ? indentSpaces + '\t"' : ' ') +
+					(x === 0 ? indentSpaces + `\t${q}` : ' ') +
 
 					// Add end padding based on the longest token in the current column
 					token.padEnd(longestTokens[x], ' ') +
 
 					// Add ending quote to the last token
-					(x === longestRowLength - 1 ? '"' : '')
+					(x === longestRowLength - 1 ? q : '')
 				)
 			}
 		}

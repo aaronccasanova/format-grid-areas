@@ -44,6 +44,18 @@
 
   grid-template-areas: "one" "two two" "three three three";
 
+  /* Single quotes */
+  grid-template-areas:
+  'three three three'
+  'two two'
+  'one';
+
+  /* Mixing single and double quotes (Should reformat using the first matched quote) */
+  grid-template-areas:
+  'three three three'
+  "two two"
+  'one';
+
   grid-template-areas:
     "one two three"
     /* what if there is a comment */
