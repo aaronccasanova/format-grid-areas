@@ -48,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
 		/**
 		 * Preferred quote to apply while formatting (e.g. single or double quote).
 		 *
-		 * Note: This determined by the first quote found in the `grid-template-areas` declaration.
+		 * Note: This is determined by the first quote found in the `grid-template-areas` declaration.
 		 */
 		let q
 		let gridAreaRows: string[] = []
